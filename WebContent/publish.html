@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="GBK">
+    <title>Insert title here</title>
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#publish").click(function(){
+                var filename=$("#file").val();
+
+                if(filename==""||!(/.+\.(jpg|png)/).test(filename))
+                {
+                    alert("请选择jpg格式的或者png格式的图片");
+                    return false;
+                }
+
+            });
+        });
+    </script>
+</head>
+<body>
+
+<form action="NewsCreate" method="post" enctype="multipart/form-data">
+    <div>上传图片 <input id="file" type="file" name="image"/></div>
+    <div>新闻标题 <input type="text" name="title"/></div>
+    <div>新闻内容</div><div><textarea type="text" name="content" row="20" cols="50"></textarea></div>
+    <div> <input id="publish" type='submit' value="发布新闻"/></div>
+</form>
+
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+#login_div {
+	margin: auto;
+	width: 700px;
+	text-align: center;
+	position: relative;
+	z-index: 100;
+}
+
+
+body, li, form {
+	margin: 0px;
+	padding: 0px;
+}
+
+#f {
+	position: relative;
+	top: 100%;
+	opacity: 1;
+	animation:regMove 1.5s;
+	animation-play-state:puase;
+	animation-fill-mode:forwards;
+	-webkit-animation:regMove 1.5s;
+	-webkit-animation-play-state:puase;
+	-webkit-animation-fill-mode:forwards;
+		-o-animation:regMove 1.5s;
+	-o-animation-play-state:puase;
+	-o-animation-fill-mode:forwards;
+		-moz-animation:regMove 1.5s;
+	-moz-animation-play-state:puase;
+	-moz-animation-fill-mode:forwards;
+}
+@keyframes regMove {
+	from {top: 85%;
+		opacity:0.0;
+	}
+	to {top: 40%;
+	opacity:1.0;
+	}
+}
+@-webkit-keyframes regMove {
+	from {top: 85%;
+		opacity:0.0;
+	}
+	to {top: 40%;
+	opacity:1.0;
+	}
+}
+@-o-keyframes regMove {
+	from {top: 85%;
+		opacity:0.0;
+	}
+	to {top: 40%;
+	opacity:1.0;
+	}
+}
+@-moz-keyframes regMove {
+	from {top: 85%;
+		opacity:0.0;
+	}
+	to {top: 40%;
+	opacity:1.0;
+	}
+}
+#background {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: -100;
+}
+#backMask {
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	background: #000000;
+	margin: auto;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	z-index: 10;
+}
+
+
+
+
+
+

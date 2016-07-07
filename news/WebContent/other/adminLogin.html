@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script type="text/javascript" src="../js/jquery-1.11.3.js"></script>
+    <!-- <script type="text/javascript" src="../js/jquery.md5.js"></script> -->
+    <script type="text/javascript" src="../js/LoginAjax.js"></script>
+    <link href="../css/adminLogin.css" rel="stylesheet" type="text/css"/>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //form对象
+            var form = $("#form");
+            //用户名输入框
+            var userInput = $("#username");
+            //密码输入框
+            var passInput = $("#password");
+            //登录按钮
+            var log_btn = $("#log_btn");
+			//是否可以登录
+			var canLogin=false;
+            //将外层的div的高度设置为窗口的高度
+            windowResize();
+            //背景的对象
+            var BackImg = $("<img src=../images/1.jpg ><img>");
+            BackImg.css(
+                    {"height": "100%", "width": "100%", "opacity": "0.0"});
+            BackImg.load(function () {
+                $("#background").append($(this));
+                $(this).animate(
+                        {"opacity": "1"}, "slow");
+                $("#backMask").animate(
+                        {"opacity": "0.5"}, "slow");
+                $("#f").css("animation-play-state", "running");
+            });
+            //每次窗口大小变化都会重新改变大小
+            $(window).resize(function () {
+                windowResize();
+            });
+            function windowResize() {
+                $("#login_div").css(
+                        {"height": $(window).height() + 'px', "width": $(window).width() + 'px'});
+                $("#background").css(
+                        {"height": $(window).height() + 'px', "width": $(window).width() + 'px'});
+            }
+
+            //监听输入
+            $(".input").bind('input propertychange', function () {
+                var username = $.trim(userInput.val());
+                var password = $.trim(passInput.val());
+                if (username != '' && password != '') {
+                    console.log("123");
+                    canLogin=true;
+                    log_btn.css("background", "#1E9FFF");
+                }
+                else {
+                	canLogin=false;
+                    log_btn.css("background", "rgba(255,255,255,0.3)");
+                }
+            });
+            log_btn.click(function () {
+            	if(canLogin)
+            	{
+                form.attr("action", "../UserLoginServlet");
+                form.submit();
+            	}
+            });
+
+            form.submit(function () {
+                var adminname = $.trim(userInput.val());
+                var adminpassword = $.trim(passInput.val());
+                //这里使用ajax提交
+                //return true;
+                var param = "adminname=" + adminname + "&adminpassword=" + adminpassword;
+                //alert(param);
+                $.post("../AdminLoginServlet"
+                        , param
+                        , function (data) {
+                            if (data == "ok") {
+                                location.href = "../admin.jsp";
+                            }
+                            else {
+                            	alert(data);
+                                //alert("用户名或密码错误1");
+                            }
+                        });
+
+                return false;
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+<div id="backMask"></div>
+<div id="login_div">
+    <div id="f">
+        <form action="" method="post" id="form" name="form2" style="position: relative;">
+            <input class="input" id="username" type="text"
+                   name="username" placeholder="  用户名"/>
+            <input class="input" id="password" type="password"
+                   name="password" placeholder="  密码"/>
+            <input id="log_btn" name="log_btn" type="button" value="登       录"/>
+        </form>
+    </div>
+</div>
+<div id="background"></div>
+</body>
+
+</html>

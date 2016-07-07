@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script type="text/javascript" src="../js/jquery-1.11.3.js"></script>
+    <!-- <script type="text/javascript" src="../js/jquery.md5.js"></script> -->
+    <script type="text/javascript" src="../js/LoginAjax.js"></script>
+    <link href="../css/login.css" rel="stylesheet" type="text/css"/>
+
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //form对象
+            var form = $("#form");
+            //记录当前是登录还是注册
+            var isLogin = true;
+            //用户名输入框
+            var userInput = $("#username");
+            //密码输入框
+            var passInput = $("#password");
+            //登录按钮
+            var log_btn = $("#log_btn");
+            //注册按钮
+            var reg_btn = $("#reg_btn");
+
+            $("#test").click(function () {
+            });
+            //将外层的div的高度设置为窗口的高度
+            windowResize();
+            //背景的对象
+            var BackImg = $("<img src=../images/" + getRandom(7) + ".jpg ><img>");
+            BackImg.css(
+                    {"height": "100%", "width": "100%", "opacity": "0.0"});
+            BackImg.load(function () {
+                $("#background").append($(this));
+                $(this).animate(
+                        {"opacity": "1"}, "slow");
+                $("#backMask").animate(
+                        {"opacity": "0.5"}, "slow");
+                $("#f").css("animation-play-state", "running");
+            });
+            //每次窗口大小变化都会重新改变大小
+            $(window).resize(function () {
+                windowResize();
+            });
+            function windowResize() {
+                $("#login_div").css(
+                        {"height": $(window).height() + 'px', "width": $(window).width() + 'px'});
+                $("#background").css(
+                        {"height": $(window).height() + 'px', "width": $(window).width() + 'px'});
+            }
+
+            //监听输入
+            $(".input").bind('input propertychange', function () {
+                var username = $.trim(userInput.val());
+                var password = $.trim(passInput.val());
+                var commit = $.trim($("#commit").val());
+                if (isLogin) {
+                    if (username != '' && password != '') {
+                        console.log("123");
+                        log_btn.css("background", "#1E9FFF");
+                    }
+                    else {
+                        log_btn.css("background", "rgba(255,255,255,0.3)");
+                    }
+                }
+                else {
+                    if (username != '' && password != '' && commit != '') {
+                        console.log("123");
+                        reg_btn.css("background", "#1E9FFF");
+                    }
+                    else {
+                        reg_btn.css("background", "rgba(255,255,255,0.3)");
+                    }
+                }
+
+            });
+            log_btn.click(function () {
+                //TODO
+                reg_btn.stop(true, true);
+                log_btn.stop(true, true);
+                if (!isLogin) {
+                    log_btn.css("background", "rgba(255,255,255,0.3)");
+                    reg_btn.css("background", "rgba(255,255,255,0.3)");
+                    log_btn.val("登       录");
+                    log_btn.animate({
+                        "width": "78%"
+                        , "font-size": "17px"
+                        , "opacity": "1"
+                        , "height": "39px"
+                        , "top": "110px"
+                        //,"margin-top":"20px"
+                    }, 500);
+                    reg_btn.animate({
+                        "width": "20%"
+                        , "font-size": "14px"
+                        , "opacity": "0.6"
+                        , "height": "35px"
+                        , "top": "112px"
+                        //,"margin-top":"22px"
+
+                    }, 500);
+                    isLogin = true;
+                    //面板缩短
+                    $("#f").animate({"height": "150px"}, 500);
+                    //隐藏密码确认输入框
+                    $("#commit").slideUp();
+                }
+                else {
+                    //form.find("password").val($.md5(password));
+                    form.attr("action", "../UserLoginServlet");
+                    form.submit();
+                }
+            });
+            reg_btn.click(function () {
+                reg_btn.stop(true, true);
+                log_btn.stop(true, true);
+                if (isLogin) {
+                    log_btn.css("background", "rgba(255,255,255,0.3)");
+                    reg_btn.css("background", "rgba(255,255,255,0.3)");
+                    //面板拉长
+                    $("#f").animate({"height": "200px"}, 400);
+                    //显示密码确认输入框
+                    $("#commit").slideDown();
+                    log_btn.val("登录");
+                    log_btn.animate({
+                        "width": "20%"
+                        , "font-size": "14px"
+                        , "opacity": "0.6"
+                        , "height": "35px"
+                        , "top": "162px"
+                        //,"margin-top":"22px"
+
+                    }, 500);
+                    reg_btn.animate({
+                        "width": "78%"
+                        , "font-size": "17px"
+                        , "opacity": "1"
+                        , "height": "39px"
+                        , "top": "160px"
+                        //,"margin-top":"20px"
+                    }, 500);
+
+                    isLogin = false;
+                }
+                else {
+                    //passInput.val($.md5(passInput.val()));
+                    
+                    form.attr("action", "../UserRegisterServlet");
+                    form.submit();
+                }
+            });
+            //获得一个随机数
+            function getRandom(n) {
+                return Math.floor(Math.random() * n + 1)
+            }
+
+            form.submit(function () {
+                var username = $.trim(userInput.val());
+                var password = $.trim(passInput.val());
+				if(!isLogin)
+				{
+					var passCheck=$.trim($("#commit").val());
+					if(passCheck!=password){
+						alert("两次密码不一致");
+						return false;
+					}
+				}
+				//这里使用ajax提交
+				//return true;
+				if(isLogin)
+				{
+					var param="username="+userInput.val()+"&password="+passInput.val();
+					//alert(param);
+					$.post("../UserLoginServlet"
+							,param
+							,function(data){
+							if(data=="ok")
+							{
+								window.location.href ="../index.jsp";
+							}
+							else{
+								alert("用户名或密码错误");
+							}
+					});
+					
+				}
+				else
+				{
+					var param=$(form).serialize();
+					alert(param);
+					//alert(param);
+					$.post("../UserRegisterServlet"
+							,param
+							,function(data){
+						alert(data+"12312312");
+							if(data=="ok")
+							{
+								window.location.href ="../index.jsp";
+							}
+							else{
+								alert("用户名重复");
+							}
+					});
+				}
+				return false;
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+<div id="backMask"></div>
+<div id="login_div">
+    <div id="f">
+        <form action="UserLoginServlet" method="post" id="form" name="form2" style="position: relative;">
+            <input class="input" id="username" type="text"
+                   name="username" placeholder="  用户名" />
+            <input class="input" id="password" type="password"
+                name="password" placeholder="  密码"/>
+            <input class="input" id="commit" type="password"
+                    name="commit" placeholder="  确认密码"/>
+            <input id="log_btn" name="log_btn" type="button" value="登       录" />
+            <input id="reg_btn" name="reg_btn" type="button" value="注册"/>
+        </form>
+    </div>
+</div>
+<div id="background"></div>
+</body>
+
+</html>
